@@ -91,9 +91,10 @@ const itemsRoles = ref<item[]>([
                         legend="Crear Nuevo Usuario" 
                         :toggleable="true" 
                         :collapsed="true"
+                        fluid
                         >
-                        <div class="flex flex-col gap-5">
-                            <div class="flex gap-4">
+                        <div class="flex flex-col w-full">
+                            <div class="grid md:grid-cols-2 gap-2 w-full">
                             <InputText 
                                 id="Nombre" 
                                 label="Nombre" 
@@ -131,7 +132,7 @@ const itemsRoles = ref<item[]>([
                              :items="itemsRoles"
                             />
                         </div>
-                        <div class="flex gap-5">
+                        <div class="grid md:grid-cols-2 gap-2 ms:grid-cols-1">
                             <InputPassword 
                              id="Password"
                              label="Contraseña"
@@ -165,7 +166,8 @@ const itemsRoles = ref<item[]>([
                                 <p-column field="name" header="Nombre"></p-column>
                                 <p-column field="lastName" header="Apellido"></p-column>
                                 <p-column field="email" header="Correo"></p-column>
-                                <Column field="Status" header="Estado"></Column>
+                                 <p-column field="role" header="Rol"></p-column>
+                                <p-column field="Status" header="Estado"></p-column>
                             </p-dataTable>
                         </div>
                     </div>

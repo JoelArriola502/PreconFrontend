@@ -41,7 +41,6 @@ export const useAuthStore = defineStore("auth", {
                 const status = localStorage.getItem("status")
                 const user = localStorage.getItem("user")
                 const token = localStorage.getItem("token")
-                console.log("datos aqui son los siguientes",token)
 
                 if (status) {
 
@@ -90,7 +89,7 @@ export const useAuthStore = defineStore("auth", {
                     localStorage.setItem("user", JSON.stringify(response.user))
                     localStorage.setItem("token", response.token)
                 }
-                console.log("esta en el login",response.message)
+               
               
 
             } catch (error) {

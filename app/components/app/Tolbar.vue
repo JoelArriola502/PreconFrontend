@@ -17,6 +17,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <AppDrawer />
   <p-toolbar>
     <template #start>
       <!-- Botón para abrir el drawer -->
@@ -31,7 +32,7 @@ onMounted(async () => {
     </template>
 
     <template #end>
-      <span class="mr-4 font-semibold">{{ nameUser.user?.name }}</span>
+      <span class="mr-4 font-semibold">{{ nameUser.user?.name }} {{ nameUser.user?.lastName }}</span>
       <p-Avatar
         :label="letraPrimera"
         class="mr-2"

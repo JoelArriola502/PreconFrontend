@@ -3,9 +3,10 @@ import { FetchError} from 'ofetch'
 import { useAuthStore } from '~/stores/auth';
 
 definePageMeta({
-  layout: false,
-  middleware: ["auth"],
-});
+  layout: false, 
+  middleware:["auth"],
+  
+})
 interface user {
     email: string,
     password: string,
@@ -41,9 +42,9 @@ const fetchLogin = async ()=>{
       "Éxito",
       "Has iniciado sesión correctamente."
     );
-    // setTimeout(() => {
-    //   navigateTo("/");
-    // }, 2000);
+    setTimeout(() => {
+      navigateTo("/");
+    }, 2000);
     return response
 
     }catch(error){

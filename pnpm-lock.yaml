@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  vue: latest
-
 importers:
 
   .:
@@ -39,7 +36,7 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(tailwindcss@4.1.17)
       vue:
-        specifier: latest
+        specifier: ^3.5.24
         version: 3.5.24
       vue-router:
         specifier: ^4.6.3
