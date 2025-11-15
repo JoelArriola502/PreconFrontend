@@ -79,11 +79,13 @@ const loading = ref(false)
                      severity="success"
                      class=" rounded-full mr-2 pi pi-verified"
                     />
+                     <NuxtLink to="/Request/LineTime">
                     <p-button
                      label="" 
                      severity="secondary"
                      class="pi pi-eye rounded-full"
                     />
+                    </NuxtLink>
                 </div>
             </div>
 

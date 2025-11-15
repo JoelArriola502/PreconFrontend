@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+const visible = ref(false)
 const options = ref(['Línia de Tiempo','Comprobantes'])
-const selectedOption = ref('Comprobantes')
+const selectedOption = ref('Línia de Tiempo')
 const events = ref([
     { status: 'Creado', date: '15/10/2020 10:30', icon: 'pi pi-plus',user:'María Gonzáles',role:'Cajero', color: 'bg-yellow-400'},
     { status: 'En Revisión', date: '15/10/2020 14:00', icon: 'pi pi-eye',user:'Carlos Ruiz',role:'Tesorero', color: 'bg-orange-500' },
@@ -89,6 +90,7 @@ const events = ref([
           <p-button 
           label="Ver Comprobante"
           fluid
+          @click="visible=true"
           class="my-2"
           severity="primary"
           />
@@ -98,7 +100,13 @@ const events = ref([
 
     </p-card>
 
-
+<p-dialog
+ v-model:visible="visible"
+>
+  <div>
+    <img src="~/assets/img/logo.png" alt="">
+  </div>
+</p-dialog>
   </div>
 </template>
 
