@@ -18,7 +18,7 @@ function logout() {
       >
       </div>
       <div class="flex min-h-0 flex-col overflow-y-auto gap-4">
-        <AppNewUser v-model:visible="drawer.visible" />
+        <AppNewUser v-model:visible="drawer.visible" v-if="auth.user?.role===1"/>
         <AppRequest v-model:visible="drawer.visible" />
       
       </div>

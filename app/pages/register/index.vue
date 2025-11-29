@@ -1,4 +1,5 @@
 <script setup lang="ts">
+definePageMeta({middleware:["auth"]})
 interface dataUser{
     name:string,
     lastName:string,
@@ -162,13 +163,24 @@ const itemsRoles = ref<item[]>([
                         <template #content>
                             <div class="">
                          <div class="card">
-                            <p-dataTable :value="Users" tableStyle="min-width: 50rem">
+                            <PDataTable :value="Users" class=" flex justify-center">
                                 <p-column field="name" header="Nombre"></p-column>
                                 <p-column field="lastName" header="Apellido"></p-column>
                                 <p-column field="email" header="Correo"></p-column>
                                  <p-column field="role" header="Rol"></p-column>
                                 <p-column field="Status" header="Estado"></p-column>
-                            </p-dataTable>
+                                <PColumn field="action" header="Acciones">
+                        <template #body="{ data }">
+                            <div class="flex gap-2 justify-center">
+                                <p-button class="pi pi-eye" severity="info" />
+                                <p-button class="pi pi-pencil" severity="primary" />
+                                <p-button class="pi pi-trash" severity="danger" />
+                            </div>
+
+                        </template>
+
+                    </PColumn>
+                            </PDataTable>
                         </div>
                     </div>
                         </template>

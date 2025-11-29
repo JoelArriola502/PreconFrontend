@@ -1,10 +1,8 @@
+// /plugins/auth.client.ts
 import { defineNuxtPlugin } from '#app'
 import { useAuthStore } from '~/stores/auth'
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const pinia = (nuxtApp as any).$pinia
-  if (!pinia) return
-  const auth = useAuthStore(pinia)
-  // llamar init lo antes posible
+export default defineNuxtPlugin(() => {
+  const auth = useAuthStore()
   auth.init()
 })
