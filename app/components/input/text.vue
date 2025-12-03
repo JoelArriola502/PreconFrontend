@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface Props{
     id:string,
-    label:string,
+    label?:string,
     placeholder?:string,
     help?:string,
     type?:string,
@@ -12,7 +12,7 @@ interface Props{
 }
 const model =defineModel<string | null>({required:true})
 const props = defineProps<Props>()
-const value =ref('')
+
 
 </script>
 <template>

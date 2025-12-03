@@ -182,7 +182,7 @@ const cancelEdit = async()=>{
         <p-card #content>
             <div class="flex gap-2 justify-between">
                 <h1 class=" text-2xl font-bold">Nuevo Cliente</h1>
-                <NuxtLink to="/request/new">
+                <NuxtLink to="/Request/link/new">
                     <p-button label="Regresar" severity="secondary" />
                 </NuxtLink>
             </div>

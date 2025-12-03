@@ -44,12 +44,10 @@ onMounted(() => {
   <div>
     <p-card #content class="  mb-5">
      <div class="flex justify-between">
-      <p>SOL-2025-005</p>
-      <p-tag 
-      severity="primary" 
-      rounded 
-      class=" font-bold p-2">
-      <i class="pi pi-plus-circle"></i> Creado</p-tag>
+      <p class="text-2xl font-bold">SOL-2025-005</p>
+       <NuxtLink to="/Request">
+        <p-button label="Regresar" severity="secondary" />
+       </NuxtLink>
      </div>
     </p-card>
     <div  class=" bg-yellow-200">
@@ -104,7 +102,7 @@ onMounted(() => {
                             comentario de prueba
                         </p>
                         </div>
-                        <Button label="Read more" variant="text"></Button>
+                      
                     </template>
             </p-card>
 

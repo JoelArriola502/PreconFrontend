@@ -1,10 +1,23 @@
 <script lang="ts" setup>
 definePageMeta({ middleware: ["auth"] })
+
+interface paymentType {
+  label: string,
+  value: number
+}
+
 const confirm = useConfirm();
-const toast = useToast();
+const { alertSuccess, alertError, alertWarning, alertInfo } = useAlert();
+
+const payment = ref<paymentType[]>([
+  { label: 'Tarjeta de Crédito', value: 1 },
+  { label: 'Tarjeta de Débito', value: 2 }
+])
 const formularios = ref([{ id: 1 }]);
-const contadorId = ref<number>(1); // 'number' en minúscula, no 'Number'
+const contadorId = ref<number>(1);
 const src = ref<any>()
+const paymentLink = ref<string>('')
+const selectPyment = ref<number>()
 const agregarFormulario = () => {
   contadorId.value++;
   formularios.value.push({ id: contadorId.value });
@@ -45,26 +58,33 @@ const confirmCreateSolicitud = () => {
       class: 'pi pi-check'
     },
     accept: () => {
-      toast.add({
-        severity: 'success',
-        summary: 'Solicitud creada',
-        detail: 'La solicitud se creó correctamente.',
-        life: 3000
-      });
+
+      alertSuccess('La solicitud se creó correctamente.', 'Solicitud creada',)
     },
     reject: () => {
-      toast.add({
-        severity: 'warn',
-        summary: 'Acción cancelada',
-        detail: 'La creación de la solicitud fue cancelada.',
-        life: 3000
-      });
+
+
+      alertWarning('La creación de la solicitud fue cancelada.', 'Acción cancelada')
     }
   });
 };
 
+const copyLink = async () => {
+  try {
+    await navigator.clipboard.writeText(paymentLink.value);
+
+    alertSuccess('Enlace copiado!')
+
+  } catch (err) {
+    console.error('Error al copiar:', err);
+    alertError('Error al copiar')
+
+  }
+}
+
 const onAdvancedUpload = () => {
-  toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+
+  alertInfo('File Uploaded', 'Success')
 };
 </script>
 
@@ -75,12 +95,12 @@ const onAdvancedUpload = () => {
     <p-card #content>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div>
-          <h1 class=" text-2xl font-bold">Crear Nueva Solicitud</h1>
+          <h1 class=" text-2xl font-bold">Nueva Solicitud de Pago con Tarjeta</h1>
 
         </div>
         <div class="flex justify-end ">
           <div class="">
-            <NuxtLink to="/client">
+            <NuxtLink to="/Request/link/clients">
               <p-button class="pi pi-plus" label=" Nuevo Cliente" />
             </NuxtLink>
           </div>
@@ -95,10 +115,15 @@ const onAdvancedUpload = () => {
             Cliente
           </label>
           <p-auto-complete class="flex w-full " fluid />
-          <label for="">
-            Comentario
-          </label>
-          <p-textarea />
+          <div class="flex flex-col gap-2">
+            <label for="">
+              Comentario
+            </label>
+
+            <p-textarea />
+            <small>Agrege un Comentario</small>
+          </div>
+
         </div>
 
 
@@ -111,71 +136,52 @@ const onAdvancedUpload = () => {
     <p-card #content>
       <div class="">
         <div class="flex justify-between">
-          <h3>Comprobantes {{ formularios.length }}</h3>
+          <h3>Solcisitudes {{ formularios.length }}</h3>
           <p-button class="pi pi-plus ms:text-xs" label=" Agregar" @click="agregarFormulario" />
 
         </div>
         <div v-for="(item, index) in formularios" :key="item.id"
           class="my-5 border-2 border-yellow-100 p-5 rounded-2xl bg-yellow-50">
           <div class="flex justify-between">
-            <p>Comprobante {{ index + 1 }}</p>
+            <p>Solicitud {{ index + 1 }}</p>
 
             <p-button class="pi pi-trash" severity="danger" @click="eliminarFormulario(index)"
               :disabled="formularios.length === 1" />
           </div>
 
           <div class="grid md:grid-cols-2 gap-2 my-5">
-            
-            <div class="flex flex-col gap-2">
-              <label for="">Nombre del Banco</label>
 
-              <p-auto-complete id="banco" class="flex w-full " placeholder="Ingrese el nombre del banco" fluid />
-            </div>
+            <InputNumber label="Monto a Pagar" help="Ingrese el monto a pagar" :minFractionDigits="2"
+              :maxFractionDigits="5" />
+            <InputText label="Número de Oferta" help="Ingrese el número de oferta" />
             <div class="flex flex-col gap-2">
-              <label for="">Número de Cuenta del Banco</label>
-
-              <p-auto-complete id="numeroCuenta" class="flex w-full " placeholder="Ingrese el número de cuenta del banco" fluid />
+              <label for="">Tipo de Pago</label>
+              <p-select :options="payment" optionLabel="label" optionValue="value" class="w-full "
+                placeholder="Selecciona un método de pago" v-model="selectPyment" />
             </div>
-           
-            <InputText id="deposito" label="Número de Depósito" help="Ingrese el número de depósito" />
-            <InputNumber id="monto" label="Monto a Pagar" help="Ingrese el monto a pagar" :minFractionDigits="2"
+            <InputNumber label="Monto de Oferta" help="Ingrese el monto de la oferta" :minFractionDigits="2"
               :maxFractionDigits="5" />
-            <InputText id="oferta" label="Número de Oferta" help="Ingrese el número de oferta" />
-            <InputNumber id="montoOfeta" label="Monto de Oferta" help="Ingrese el monto de la oferta" :minFractionDigits="2"
+            <InputNumber label="Diferencia" help="Ingrese la diferencia" :minFractionDigits="2"
               :maxFractionDigits="5" />
-            <InputNumber id="diferencia" label="Diferencia" help="Ingrese la diferencia" :minFractionDigits="2"
-              :maxFractionDigits="5" />
-            <div class="flex flex-col gap-2">
+            <!-- <div class="flex flex-col gap-2">
               <label for="">Fecha</label>
               <p-date-picker showIcon fluid iconDisplay="input" dateFormat="dd/mm/yy" lang="es" />
               <small>Ingrese la fecha</small>
-            </div>
+            </div> -->
             <div class="flex flex-col gap-2">
-              <label>Cargar Comprobante</label>
-             <PFileUpload 
-                id="comprobante" 
-                mode="advanced"
-                name="comprobante"
-                chooseLabel="Cargar Comprobante"
-                cancelLabel="Cancelar"
-                @select="onFileSelect"
-               :showUploadButton="false"
-                accept="image/*"
-                :multiple="false"
-                cancelIcon="pi pi-times"
-                :maxFileSize="1000000"
-                @upload="onAdvancedUpload"
-            >
-            </PFileUpload>
-            
-              <small>Cargue el comprobante (PNG, JPG, PNF)</small>
-             
+              <label>Cargar PDF ofeta</label>
+              <PFileUpload mode="advanced" name="pdf" chooseLabel="Cargar pdf" cancelLabel="Cancelar"
+                @select="onFileSelect" :showUploadButton="false" accept="application/pdf" :multiple="false"
+                cancelIcon="pi pi-times" :maxFileSize="1000000" @upload="onAdvancedUpload">
+              </PFileUpload>
+
+              <small>Cargue el PDF de la oferta</small>
+
             </div>
 
-          </div>
-          <div class="flex gap-2 ">
 
           </div>
+       
         </div>
         <div class="border-2 border-yellow-100 p-5 rounded-2xl bg-yellow-50">
           <div class="flex justify-between">
@@ -185,7 +191,7 @@ const onAdvancedUpload = () => {
         </div>
         <div class="flex my-5 justify-end ">
           <div class=" flex gap-2">
-            <NuxtLink to="/request">
+            <NuxtLink to="/request/link">
               <p-button label="Cancelar" severity="secondary" />
             </NuxtLink>
             <p-button class="pi pi-plus" label=" Crear Solicitud" severity="success" @click="confirmCreateSolicitud" />
